@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "glthread.h"
+#include "net.h"
 
 #define TOPOLOGY_NAME_SIZE 64
 
@@ -16,13 +17,13 @@ typedef struct graph_
 } graph_t;
 
 graph_t *
-create_graph(const char *topology_name);
+graph_create(const char *topology_name);
 
 node_t *
-create_graph_node(graph_t *graph);
+graph_create_node(graph_t *graph, ipv4_t *loopback);
 
-void insert_link_between_two_nodes(node_t *node1, node_t *node2, uint64_t cost);
+void graph_insert_link_between_two_nodes(node_t *node_1, node_t *node_2, ipv4_t *ip_1, ipv4_t *ip_2, uint8_t mask_1, uint8_t mask_2, uint64_t link_cost);
 
-void dump_graph(graph_t *graph);
+void graph_dump(graph_t *graph);
 
 #endif /*_DS_GRAPH_*/

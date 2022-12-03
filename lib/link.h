@@ -12,13 +12,24 @@ typedef struct link_
     uint64_t cost;
 } link_t;
 
-link_t *create_link();
-void delete_link(link_t *link);
-interface_t *get_link_interface1(link_t *link);
-interface_t *get_link_interface2(link_t *link);
-uint64_t get_link_cost(link_t *link);
-void set_link_interface1(link_t *link, interface_t *interface);
-void set_link_interface2(link_t *link, interface_t *interface);
-void set_link_cost(link_t *link, uint64_t cost);
+link_t *
+link_create();
+
+void link_delete(link_t *link);
+
+interface_t *
+link_get_interface1(link_t *link);
+
+interface_t *
+link_get_interface2(link_t *link);
+
+uint64_t
+link_get_cost(link_t *link);
+
+void link_set_interface1(link_t *link, interface_t *interface);
+
+void link_set_interface2(link_t *link, interface_t *interface);
+
+void link_set_cost(link_t *link, uint64_t cost);
 
 #endif /* __LINK_H__ */

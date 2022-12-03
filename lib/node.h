@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "glthread.h"
+#include "net.h"
 
 #define MAX_INTF_PER_NODE 64
 
@@ -23,31 +24,34 @@ typedef struct node_
     uint32_t node_id;
     uint32_t no_of_interfaces;
     interface_t *intf[MAX_INTF_PER_NODE];
+    ipv4_t loopback;
     glthread_t glue;
 } node_t;
 
 interface_t *
-node_add_interface(node_t *node);
+node_add_interface(node_t *node, ipv4_t *ip, uint8_t net_mask);
 
 node_t *
-create_node(uint32_t node_id);
+node_create(void);
 
-void delete_node(node_t *node);
-
-uint32_t
-get_node_id(node_t *node);
-
-void set_node_id(node_t *node, uint32_t node_id);
+void node_delete(node_t *node);
 
 uint32_t
-get_node_no_of_interfaces(node_t *node);
+node_get_id(node_t *node);
 
-interface_t *
-get_node_interface_by_id(node_t *node, uint32_t interface_id);
+void node_set_id(node_t *node, uint32_t node_id);
+
+uint32_t
+node_get_no_of_interfaces(node_t *node);
 
 glthread_t *
-get_node_glue(node_t *node);
+node_get_glue(node_t *node);
 
 void node_init_glue(node_t *node);
+
+void node_set_loopback(node_t *node, ipv4_t *loopback);
+
+ipv4_t *
+node_get_loopback(node_t *node);
 
 #endif /* __NODE_H__ */

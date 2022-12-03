@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g
-OBJ = build/glthread.o build/graph.o build/interface.o build/link.o build/node.o
+OBJ = build/glthread.o build/graph.o build/interface.o build/link.o build/node.o build/net.o
 
 TARGET:out
 
@@ -24,3 +24,10 @@ build/link.o:lib/link.c
 
 build/node.o:lib/node.c
 	${CC} ${CFLAGS} -c lib/node.c -o build/node.o
+
+build/net.o:lib/net.c
+	${CC} ${CFLAGS} -c lib/net.c -o build/net.o
+
+clean:
+	rm -rf build/*
+	rm -rf test.o
