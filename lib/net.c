@@ -3,10 +3,9 @@
 #include "net.h"
 
 inline uint64_t
-net_generate_random_mac(uint32_t seed)
+net_generate_random_mac()
 {
     uint64_t rn = 0;
-    srand(seed);
     rn |= rand();
     rn <<= 32;
     rn |= rand();
@@ -34,9 +33,9 @@ net_get_ipv4_octate(ipv4_t *ipv4, uint8_t octate_no)
 }
 
 inline void
-net_set_ipv4_octate(ipv4_t *dest_ipv4, ipv4_t *src_ipv4)
+net_set_ipv4_octate(ipv4_t *ipv4, uint8_t octate_no, uint8_t val)
 {
-    memcpy(dest_ipv4, src_ipv4, sizeof(ipv4_t));
+    ipv4->addr[octate_no] = val;
 }
 
 inline uint64_t

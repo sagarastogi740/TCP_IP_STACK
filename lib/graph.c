@@ -24,10 +24,67 @@ get_neighbour_interface(interface_t *interface)
     }
 }
 
+static inline uint32_t
+ip_string_to_uin32(const char *ip)
+{
+    uint32_t sum = 0;
+    uint8_t num = 0;
+    size_t len = strlen(ip);
+    for (size_t i = 0; i <= len; i++)
+    {
+        switch (ip[i])
+        {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            num *= 10;
+            num += ((uint8_t)ip[i] - (uint8_t)'0');
+            break;
+        case '.':
+            sum *= 256;
+            sum += num;
+            num = 0;
+            break;
+        case '\0':
+            sum *= 256;
+            sum += num;
+            break;
+        default:
+            printf("Unknown charactor in ip address string configured in topology.\n");
+            exit(0);
+        }
+    }
+    return sum;
+}
+
 static inline void
 dump_ipv4_addr(ipv4_t *ipv4, uint8_t mask)
 {
-    printf("%u.%u.%u.%u/%u", net_get_ipv4_octate(ipv4, 0), net_get_ipv4_octate(ipv4, 1), net_get_ipv4_octate(ipv4, 2), net_get_ipv4_octate(ipv4, 3), mask);
+    printf("%u.%u.%u.%u/%u",
+           net_get_ipv4_octate(ipv4, 3),
+           net_get_ipv4_octate(ipv4, 2),
+           net_get_ipv4_octate(ipv4, 1),
+           net_get_ipv4_octate(ipv4, 0),
+           mask);
+}
+
+static inline void
+dump_mac_addr(mac_t *mac)
+{
+    printf("%u:%u:%u:%u:%u:%u",
+           net_get_mac_octate(mac, 5),
+           net_get_mac_octate(mac, 4),
+           net_get_mac_octate(mac, 3),
+           net_get_mac_octate(mac, 2),
+           net_get_mac_octate(mac, 1),
+           net_get_mac_octate(mac, 0));
 }
 
 inline graph_t *
@@ -40,21 +97,27 @@ graph_create(const char *topology_name)
 }
 
 inline node_t *
-graph_create_node(graph_t *graph, ipv4_t *loopback)
+graph_create_node(graph_t *graph, const char *loopback)
 {
     node_t *node = node_create();
     node_set_id(node, graph->no_of_nodes++);
-    node_set_loopback(node, loopback);
+    node_set_loopback(node, ip_string_to_uin32(loopback));
     node_init_glue(node);
     glthread_add_next(&graph->graph_node_list, node_get_glue(node));
     return node;
 }
 
-void graph_insert_link_between_two_nodes(node_t *node_1, node_t *node_2, ipv4_t *ip_1, ipv4_t *ip_2, uint8_t mask_1, uint8_t mask_2, uint64_t link_cost)
+void graph_insert_link_between_two_nodes(node_t *node_1,
+                                         node_t *node_2,
+                                         const char *ip_1,
+                                         const char *ip_2,
+                                         uint8_t mask_1,
+                                         uint8_t mask_2,
+                                         uint64_t link_cost)
 {
     link_t *link = (link_t *)calloc(1, sizeof(link_t));
-    interface_t *intf_1 = node_add_interface(node_1, ip_1, mask_1);
-    interface_t *intf_2 = node_add_interface(node_2, ip_2, mask_2);
+    interface_t *intf_1 = node_add_interface(node_1, ip_string_to_uin32(ip_1), mask_1);
+    interface_t *intf_2 = node_add_interface(node_2, ip_string_to_uin32(ip_2), mask_2);
     link_set_interface1(link, intf_1);
     link_set_interface2(link, intf_2);
     link_set_cost(link, link_cost);
@@ -78,6 +141,8 @@ void graph_dump(graph_t *graph)
             printf(" ");
             printf("Local Interface : ");
             dump_ipv4_addr(interface_get_ip_octate(interface), interface_get_mask(interface));
+            printf(", ");
+            dump_mac_addr(interface_get_mac_octate(interface));
 
             printf("    ");
             printf("Neighbour Node : ");
@@ -86,6 +151,8 @@ void graph_dump(graph_t *graph)
             printf("    ");
             printf("Neighbour Interface : ");
             dump_ipv4_addr(interface_get_ip_octate(get_neighbour_interface(interface)), interface_get_mask(get_neighbour_interface(interface)));
+            printf(", ");
+            dump_mac_addr(interface_get_mac_octate(get_neighbour_interface(interface)));
 
             printf("    ");
             printf("Cost = %ld", link_get_cost(interface_get_link(interface)));

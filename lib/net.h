@@ -33,9 +33,9 @@ net_get_mac_octate(mac_t *mac, uint8_t octate_no);
 
 void net_set_mac_octate(mac_t *dest_mac, mac_t *src_mac);
 
-void net_set_ipv4_octate(ipv4_t *dest_ipv4, ipv4_t *src_ipv4);
+void net_set_ipv4_octate(ipv4_t *dest_ipv4, uint8_t octate_no, uint8_t val);
 
 uint64_t
-net_generate_random_mac(uint32_t seed);
+net_generate_random_mac();
 
 #endif /* __NET_H__ */

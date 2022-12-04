@@ -3,13 +3,13 @@
 #include "interface.h"
 
 inline interface_t *
-node_add_interface(node_t *node, ipv4_t *ip, uint8_t net_mask)
+node_add_interface(node_t *node, uint32_t ip_addr, uint8_t net_mask)
 {
     interface_t *interface = interface_create();
     interface_set_id(interface, node->no_of_interfaces);
     interface_set_parent(interface, node);
-    interface_set_mac(interface, net_generate_random_mac(MAX_INTF_PER_NODE * node->node_id + node->no_of_interfaces));
-    interface_set_ip_octate(interface, ip);
+    interface_set_mac(interface, net_generate_random_mac());
+    interface_set_ip(interface, ip_addr);
     interface_set_mask(interface, net_mask);
     node->intf[node->no_of_interfaces] = interface;
     node->no_of_interfaces++;
@@ -59,9 +59,9 @@ node_init_glue(node_t *node)
 }
 
 inline void
-node_set_loopback(node_t *node, ipv4_t *loopback)
+node_set_loopback(node_t *node, uint32_t loopback)
 {
-    net_set_ipv4_octate(&node->loopback, loopback);
+    net_set_ipv4(&node->loopback, loopback);
 }
 
 inline ipv4_t *

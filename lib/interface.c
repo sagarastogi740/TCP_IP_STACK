@@ -82,9 +82,9 @@ interface_set_ip(interface_t *interface, uint32_t ip)
 }
 
 inline void
-interface_set_ip_octate(interface_t *interface, ipv4_t *ip)
+interface_set_ip_octate(interface_t *interface, uint8_t octate_no, uint8_t val)
 {
-    net_set_ipv4_octate(&interface->ip, ip);
+    net_set_ipv4_octate(&interface->ip, octate_no, val);
 }
 
 inline uint8_t
@@ -103,4 +103,10 @@ inline ipv4_t *
 interface_get_ip_octate(interface_t *interface)
 {
     return &interface->ip;
+}
+
+inline mac_t *
+interface_get_mac_octate(interface_t *interface)
+{
+    return &interface->mac;
 }

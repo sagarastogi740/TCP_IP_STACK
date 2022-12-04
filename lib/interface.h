@@ -49,7 +49,7 @@ interface_get_ip(interface_t *interface);
 
 void interface_set_ip(interface_t *interface, uint32_t ip);
 
-void interface_set_ip_octate(interface_t *interface, ipv4_t *ip);
+void interface_set_ip_octate(interface_t *interface, uint8_t octate_no, uint8_t val);
 
 uint8_t
 interface_get_mask(interface_t *interface);
@@ -58,5 +58,8 @@ void interface_set_mask(interface_t *interface, uint8_t mask);
 
 ipv4_t *
 interface_get_ip_octate(interface_t *interface);
+
+mac_t *
+interface_get_mac_octate(interface_t *interface);
 
 #endif /* __INTERFACE_H__ */

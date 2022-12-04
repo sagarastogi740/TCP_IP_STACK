@@ -29,7 +29,7 @@ typedef struct node_
 } node_t;
 
 interface_t *
-node_add_interface(node_t *node, ipv4_t *ip, uint8_t net_mask);
+node_add_interface(node_t *node, uint32_t ip_addr, uint8_t net_mask);
 
 node_t *
 node_create(void);
@@ -49,7 +49,7 @@ node_get_glue(node_t *node);
 
 void node_init_glue(node_t *node);
 
-void node_set_loopback(node_t *node, ipv4_t *loopback);
+void node_set_loopback(node_t *node, uint32_t loopback);
 
 ipv4_t *
 node_get_loopback(node_t *node);
