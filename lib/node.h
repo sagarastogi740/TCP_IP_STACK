@@ -25,6 +25,8 @@ typedef struct node_
     uint32_t no_of_interfaces;
     interface_t *intf[MAX_INTF_PER_NODE];
     ipv4_t loopback;
+    uint32_t udp_port_number;
+    int udp_sock_fd;
     glthread_t glue;
 } node_t;
 
@@ -53,5 +55,17 @@ void node_set_loopback(node_t *node, uint32_t loopback);
 
 ipv4_t *
 node_get_loopback(node_t *node);
+
+uint32_t
+node_get_udp_port_number(node_t *node);
+
+int node_get_udp_sock_fd(node_t *node);
+
+void node_set_udp_port_number(node_t *node, uint32_t udp_port_number);
+
+void node_set_udp_sock_fd(node_t *node, int udp_sock_fd);
+
+interface_t *
+node_get_interface_by_id(node_t *node, uint32_t interface_id);
 
 #endif /* __NODE_H__ */

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "link.h"
+#include "interface.h"
 
 inline link_t *
 link_create()
@@ -47,4 +48,20 @@ inline void
 link_set_cost(link_t *link, uint64_t cost)
 {
     link->cost = cost;
+}
+
+inline interface_t *
+link_get_other_interface(interface_t *interface)
+{
+    link_t *link = interface_get_link(interface);
+    interface_t *intf_1 = link_get_interface1(link);
+    interface_t *intf_2 = link_get_interface2(link);
+    if (interface == intf_1)
+    {
+        return intf_2;
+    }
+    else
+    {
+        return intf_1;
+    }
 }

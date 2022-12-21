@@ -32,4 +32,7 @@ void link_set_interface2(link_t *link, interface_t *interface);
 
 void link_set_cost(link_t *link, uint64_t cost);
 
+interface_t *
+link_get_other_interface(interface_t *interface);
+
 #endif /* __LINK_H__ */

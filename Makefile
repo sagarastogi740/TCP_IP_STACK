@@ -1,6 +1,12 @@
 CC = gcc
 CFLAGS = -g
-OBJ = build/glthread.o build/graph.o build/interface.o build/link.o build/node.o build/net.o
+OBJ = build/glthread.o \
+	build/graph.o \
+	build/interface.o \
+	build/link.o \
+	build/node.o \
+	build/net.o \
+	build/comm.o
 
 TARGET:out
 
@@ -27,6 +33,9 @@ build/node.o:lib/node.c
 
 build/net.o:lib/net.c
 	${CC} ${CFLAGS} -c lib/net.c -o build/net.o
+
+build/comm.o:lib/comm.c
+	${CC} ${CFLAGS} -c lib/comm.c -o build/comm.o
 
 clean:
 	rm -rf build/*

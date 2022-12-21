@@ -7,30 +7,15 @@
 #include "node.h"
 #include "interface.h"
 #include "net.h"
-
-static inline interface_t *
-get_neighbour_interface(interface_t *interface)
-{
-    link_t *link = interface_get_link(interface);
-    interface_t *intf_1 = link_get_interface1(link);
-    interface_t *intf_2 = link_get_interface2(link);
-    if (interface == intf_1)
-    {
-        return intf_2;
-    }
-    else
-    {
-        return intf_1;
-    }
-}
+#include "comm.h"
 
 static inline uint32_t
 ip_string_to_uin32(const char *ip)
 {
     uint32_t sum = 0;
     uint8_t num = 0;
-    size_t len = strlen(ip);
-    for (size_t i = 0; i <= len; i++)
+    size_t len = strnlen(ip, 15);
+    for (size_t i = 0; i < len; i++)
     {
         switch (ip[i])
         {
@@ -52,15 +37,13 @@ ip_string_to_uin32(const char *ip)
             sum += num;
             num = 0;
             break;
-        case '\0':
-            sum *= 256;
-            sum += num;
-            break;
         default:
             printf("Unknown charactor in ip address string configured in topology.\n");
             exit(0);
         }
     }
+    sum *= 256;
+    sum += num;
     return sum;
 }
 
@@ -104,6 +87,7 @@ graph_create_node(graph_t *graph, const char *loopback)
     node_set_loopback(node, ip_string_to_uin32(loopback));
     node_init_glue(node);
     glthread_add_next(&graph->graph_node_list, node_get_glue(node));
+    comm_init_udp_socket(node);
     return node;
 }
 
@@ -138,6 +122,8 @@ void graph_dump(graph_t *graph)
         interface_t *interface = NULL;
         NODE_ITERATE_OVER_INTF_START(node, interface)
         {
+            interface_t *nbr_interface = link_get_other_interface(interface);
+
             printf(" ");
             printf("Local Interface : ");
             dump_ipv4_addr(interface_get_ip_octate(interface), interface_get_mask(interface));
@@ -146,13 +132,14 @@ void graph_dump(graph_t *graph)
 
             printf("    ");
             printf("Neighbour Node : ");
-            dump_ipv4_addr(node_get_loopback(interface_get_parent(get_neighbour_interface(interface))), 32);
+            dump_ipv4_addr(node_get_loopback(interface_get_parent(nbr_interface)), 32);
 
             printf("    ");
             printf("Neighbour Interface : ");
-            dump_ipv4_addr(interface_get_ip_octate(get_neighbour_interface(interface)), interface_get_mask(get_neighbour_interface(interface)));
+            dump_ipv4_addr(interface_get_ip_octate(nbr_interface),
+                           interface_get_mask(nbr_interface));
             printf(", ");
-            dump_mac_addr(interface_get_mac_octate(get_neighbour_interface(interface)));
+            dump_mac_addr(interface_get_mac_octate(nbr_interface));
 
             printf("    ");
             printf("Cost = %ld", link_get_cost(interface_get_link(interface)));
@@ -160,4 +147,25 @@ void graph_dump(graph_t *graph)
         }
         NODE_ITERATE_OVER_INTF_END();
     }
+}
+
+inline node_t *
+graph_glue_to_node(glthread_t *glthread)
+{
+    return GLTHREAD_TO_PARENT_NODE_ADDR(node_t, glthread, glue);
+}
+
+inline node_t *
+graph_get_node_by_id(graph_t *graph, uint32_t node_id)
+{
+    glthread_t *itr = NULL;
+    ITERATE_OVER_GLTHREAD(&graph->graph_node_list, itr)
+    {
+        node_t *node = graph_glue_to_node(itr);
+        if (node_get_id(node) == node_id)
+        {
+            return node;
+        }
+    }
+    return NULL;
 }

@@ -69,3 +69,33 @@ node_get_loopback(node_t *node)
 {
     return &node->loopback;
 }
+
+inline uint32_t
+node_get_udp_port_number(node_t *node)
+{
+    return node->udp_port_number;
+}
+
+inline int
+node_get_udp_sock_fd(node_t *node)
+{
+    return node->udp_sock_fd;
+}
+
+inline void
+node_set_udp_port_number(node_t *node, uint32_t udp_port_number)
+{
+    node->udp_port_number = udp_port_number;
+}
+
+inline void
+node_set_udp_sock_fd(node_t *node, int udp_sock_fd)
+{
+    node->udp_sock_fd = udp_sock_fd;
+}
+
+inline interface_t *
+node_get_interface_by_id(node_t *node, uint32_t interface_id)
+{
+    return node->intf[interface_id];
+}

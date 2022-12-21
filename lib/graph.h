@@ -32,4 +32,10 @@ void graph_insert_link_between_two_nodes(node_t *node_1,
 
 void graph_dump(graph_t *graph);
 
+node_t *
+graph_glue_to_node(glthread_t *glthread);
+
+node_t *
+graph_get_node_by_id(graph_t *graph, uint32_t node_id);
+
 #endif /*_DS_GRAPH_*/
