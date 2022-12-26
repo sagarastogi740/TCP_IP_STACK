@@ -2,6 +2,7 @@
 #define __NET_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 typedef struct ipv4_
 {
@@ -37,5 +38,11 @@ void net_set_ipv4_octate(ipv4_t *dest_ipv4, uint8_t octate_no, uint8_t val);
 
 uint64_t
 net_generate_random_mac();
+
+bool net_are_mac_equal(mac_t *mac_1, mac_t *mac_2);
+
+bool net_is_mac_broadcast(mac_t *mac);
+
+bool net_are_ip_equal(ipv4_t *ip_1, ipv4_t *ip_2);
 
 #endif /* __NET_H__ */

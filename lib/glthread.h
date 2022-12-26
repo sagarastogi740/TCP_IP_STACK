@@ -8,8 +8,8 @@
 
 #define BASE(glthreadptr) ((glthreadptr)->next)
 
-#define ITERATE_OVER_GLTHREAD(glthreadptrstart, glthreadptr) \
-    for (glthreadptr = BASE(glthreadptrstart); glthreadptr != NULL; glthreadptr = (glthreadptr)->next)
+#define ITERATE_OVER_GLTHREAD(glthreadptrstart, glthreadptr_itr) \
+    for (glthreadptr_itr = BASE(glthreadptrstart); glthreadptr_itr != NULL; glthreadptr_itr = (glthreadptr_itr)->next)
 
 typedef struct glthread_
 {
@@ -21,7 +21,7 @@ void glthread_add_next(glthread_t *base_glthread, glthread_t *new_glthread);
 
 void glthread_add_before(glthread_t *base_glthread, glthread_t *new_glthread);
 
-void remove_glthread(glthread_t *glthread);
+void glthread_remove(glthread_t *glthread);
 
 void init_glthread(glthread_t *glthread);
 

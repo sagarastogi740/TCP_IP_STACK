@@ -14,6 +14,7 @@
 #include "glthread.h"
 #include "interface.h"
 #include "link.h"
+#include "../Layer2/layer2.h"
 
 static uint32_t udp_port_number = 40000;
 
@@ -23,6 +24,7 @@ static uint8_t recv_buffer[MAX_PACKET_BUFFER_SIZE];
 typedef struct packet_
 {
     uint32_t interface_id;
+    uint32_t data_size;
     uint8_t data[MAX_PACKET_BUFFER_SIZE - sizeof(uint32_t)];
 } packet_t;
 
@@ -36,7 +38,7 @@ static void _pkt_receive(node_t *receiving_node,
 
     interface_t *interface = node_get_interface_by_id(receiving_node, pkt.interface_id);
 
-    comm_receive(receiving_node, interface, pkt.data, sizeof(pkt.data));
+    comm_receive(receiving_node, interface, pkt.data, pkt.data_size);
 }
 
 static uint32_t
@@ -133,6 +135,7 @@ comm_send_pkt_out(uint8_t *pkt, uint32_t pkt_size, interface_t *interface)
 
     memset(send_buffer, 0, MAX_PACKET_BUFFER_SIZE);
     packet.interface_id = interface_get_id(nbr_interface);
+    packet.data_size = pkt_size;
     memcpy(packet.data, pkt, pkt_size);
 
     memcpy(send_buffer, &packet, MAX_PACKET_BUFFER_SIZE);
@@ -176,8 +179,7 @@ void comm_init_udp_socket(node_t *node)
 
 int comm_receive(node_t *recv_node, interface_t *recv_interface, void *data, uint32_t size)
 {
-    uint8_t *msg = data;
-    printf("msg = %s, on node = %u, interface = %u\n", msg, node_get_id(recv_node), interface_get_id(recv_interface));
+    layer2_frame_recv(recv_node, recv_interface, data, size);
     return 0;
 }
 

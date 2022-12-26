@@ -41,11 +41,12 @@ graph_t *build_topology()
 
 int main()
 {
-    char msg[] = "Hello topo";
+    char msg[13] = "Hello topo";
     graph_t *graph = build_topology();
-    comm_send(graph, 0, 0, msg, sizeof(msg));
     comm_send(graph, 0, 1, msg, sizeof(msg));
-    sleep(1);
+    comm_send(graph, 0, 1, msg, sizeof(msg));
+    while (1)
+        ;
     graph_dump(graph);
     return 0;
 }

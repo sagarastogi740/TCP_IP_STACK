@@ -1,5 +1,6 @@
 #include <memory.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "net.h"
 
 inline uint64_t
@@ -62,4 +63,34 @@ inline void
 net_set_mac_octate(mac_t *dest_mac, mac_t *src_mac)
 {
     memcpy(dest_mac, src_mac, sizeof(mac_t));
+}
+
+inline bool
+net_are_mac_equal(mac_t *mac_1, mac_t *mac_2)
+{
+    return ((mac_1->addr[0] == mac_2->addr[0]) &&
+            (mac_1->addr[1] == mac_2->addr[1]) &&
+            (mac_1->addr[2] == mac_2->addr[2]) &&
+            (mac_1->addr[3] == mac_2->addr[3]) &&
+            (mac_1->addr[4] == mac_2->addr[4]) &&
+            (mac_1->addr[5] == mac_2->addr[5]));
+}
+
+inline bool
+net_is_mac_broadcast(mac_t *mac)
+{
+    return ((mac->addr[0] == 255) &&
+            (mac->addr[1] == 255) &&
+            (mac->addr[2] == 255) &&
+            (mac->addr[3] == 255) &&
+            (mac->addr[4] == 255) &&
+            (mac->addr[5] == 255));
+}
+
+bool net_are_ip_equal(ipv4_t *ip_1, ipv4_t *ip_2)
+{
+    return ((ip_1->addr[0] == ip_2->addr[0]) &&
+            (ip_1->addr[1] == ip_2->addr[1]) &&
+            (ip_1->addr[2] == ip_2->addr[2]) &&
+            (ip_1->addr[3] == ip_2->addr[3]));
 }

@@ -50,7 +50,7 @@ void glthread_add_last(glthread_t *base_glthread, glthread_t *new_glthread)
     glthread_add_next(prevglthreadptr, new_glthread);
 }
 
-void remove_glthread(glthread_t *glthread)
+void glthread_remove(glthread_t *glthread)
 {
     if (glthread->prev)
         glthread->prev->next = glthread->next;

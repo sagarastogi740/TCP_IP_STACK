@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include "graph.h"
+
 #define MAX_PACKET_BUFFER_SIZE 2048
 
 void comm_init_udp_socket(node_t *node);

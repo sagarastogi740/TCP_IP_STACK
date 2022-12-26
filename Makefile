@@ -6,7 +6,11 @@ OBJ = build/glthread.o \
 	build/link.o \
 	build/node.o \
 	build/net.o \
-	build/comm.o
+	build/comm.o \
+	build/layer2.o \
+	build/arp_entry.o \
+	build/arp_table.o
+
 
 TARGET:out
 
@@ -37,6 +41,16 @@ build/net.o:lib/net.c
 build/comm.o:lib/comm.c
 	${CC} ${CFLAGS} -c lib/comm.c -o build/comm.o
 
+build/layer2.o:Layer2/layer2.c
+	${CC} ${CFLAGS} -c Layer2/layer2.c -o build/layer2.o
+
+build/arp_entry.o:Layer2/arp_entry.c
+	${CC} ${CFLAGS} -c Layer2/arp_entry.c -o build/arp_entry.o
+
+build/arp_table.o:Layer2/arp_table.c
+	${CC} ${CFLAGS} -c Layer2/arp_table.c -o build/arp_table.o
+
 clean:
 	rm -rf build/*
-	rm -rf test.o
+	rm test.o
+	rm out
