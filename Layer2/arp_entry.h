@@ -39,4 +39,6 @@ void arp_entry_set_interface(arp_entry_t *arp_entry, interface_t *oif);
 
 bool arp_entry_lookup(arp_entry_t *arp_entry, ipv4_t *ip);
 
+void arp_entry_dump(arp_entry_t *entry);
+
 #endif /* __ARP_ENTRY_H__ */

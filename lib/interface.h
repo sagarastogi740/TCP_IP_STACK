@@ -42,7 +42,7 @@ interface_get_mac(interface_t *interface);
 
 void interface_set_mac(interface_t *interface, uint64_t mac);
 
-void interface_set_mac_octet(interface_t *interface, mac_t *mac);
+void interface_set_mac_octet(interface_t *interface, uint8_t octate_no, uint8_t value);
 
 uint32_t
 interface_get_ip(interface_t *interface);

@@ -47,29 +47,6 @@ ip_string_to_uin32(const char *ip)
     return sum;
 }
 
-static inline void
-dump_ipv4_addr(ipv4_t *ipv4, uint8_t mask)
-{
-    printf("%u.%u.%u.%u/%u",
-           net_get_ipv4_octate(ipv4, 3),
-           net_get_ipv4_octate(ipv4, 2),
-           net_get_ipv4_octate(ipv4, 1),
-           net_get_ipv4_octate(ipv4, 0),
-           mask);
-}
-
-static inline void
-dump_mac_addr(mac_t *mac)
-{
-    printf("%u:%u:%u:%u:%u:%u",
-           net_get_mac_octate(mac, 5),
-           net_get_mac_octate(mac, 4),
-           net_get_mac_octate(mac, 3),
-           net_get_mac_octate(mac, 2),
-           net_get_mac_octate(mac, 1),
-           net_get_mac_octate(mac, 0));
-}
-
 inline graph_t *
 graph_create(const char *topology_name)
 {
@@ -117,7 +94,7 @@ void graph_dump(graph_t *graph)
     {
         node_t *node = GLTHREAD_TO_PARENT_NODE_ADDR(node_t, glthread_itr, glue);
         printf("Node ");
-        dump_ipv4_addr(node_get_loopback(node), 32);
+        net_dump_ipv4_addr(node_get_loopback(node), 32);
         printf("\n");
         interface_t *interface = NULL;
         NODE_ITERATE_OVER_INTF_START(node, interface)
@@ -126,20 +103,20 @@ void graph_dump(graph_t *graph)
 
             printf(" ");
             printf("Local Interface : ");
-            dump_ipv4_addr(interface_get_ip_octate(interface), interface_get_mask(interface));
+            net_dump_ipv4_addr(interface_get_ip_octate(interface), interface_get_mask(interface));
             printf(", ");
-            dump_mac_addr(interface_get_mac_octate(interface));
+            net_dump_mac_addr(interface_get_mac_octate(interface));
 
             printf("    ");
             printf("Neighbour Node : ");
-            dump_ipv4_addr(node_get_loopback(interface_get_parent(nbr_interface)), 32);
+            net_dump_ipv4_addr(node_get_loopback(interface_get_parent(nbr_interface)), 32);
 
             printf("    ");
             printf("Neighbour Interface : ");
-            dump_ipv4_addr(interface_get_ip_octate(nbr_interface),
-                           interface_get_mask(nbr_interface));
+            net_dump_ipv4_addr(interface_get_ip_octate(nbr_interface),
+                               interface_get_mask(nbr_interface));
             printf(", ");
-            dump_mac_addr(interface_get_mac_octate(nbr_interface));
+            net_dump_mac_addr(interface_get_mac_octate(nbr_interface));
 
             printf("    ");
             printf("Cost = %ld", link_get_cost(interface_get_link(interface)));

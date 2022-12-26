@@ -1,7 +1,9 @@
-#include "arp_table.h"
 #include <stdlib.h>
-#include "../lib/glthread.h"
+#include <stdio.h>
+#include "arp_table.h"
 #include "arp_entry.h"
+#include "../lib/glthread.h"
+#include "../lib/net.h"
 
 arp_table_t *arp_table_create()
 {
@@ -50,13 +52,16 @@ void arp_table_delete_entry(arp_table_t *arp_table, ipv4_t *ip)
 void arp_table_entry_add(arp_table_t *arp_table, ipv4_t *ip, mac_t *mac, interface_t *oif)
 {
     arp_entry_t *arp_entry = arp_entry_create(ip, mac, oif);
-    arp_entry_set_ip(arp_entry, ip);
-    arp_entry_set_mac(arp_entry, mac);
-    arp_entry_set_interface(arp_entry, oif);
-    glthread_add_before(&arp_table->arp_entries, arp_entry_get_glue(arp_entry));
+    glthread_add_next(&arp_table->arp_entries, arp_entry_get_glue(arp_entry));
 }
 
 void arp_table_dump(arp_table_t *arp_table)
 {
-    /* Comming Soon */
+    glthread_t *itr;
+    ITERATE_OVER_GLTHREAD(&arp_table->arp_entries, itr)
+    {
+        arp_entry_t *arp_entry = arp_entry_glue_to_entry(itr);
+        arp_entry_dump(arp_entry);
+        printf("\n");
+    }
 }

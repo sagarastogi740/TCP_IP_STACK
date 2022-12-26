@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <memory.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -60,9 +61,9 @@ net_get_mac_octate(mac_t *mac, uint8_t octate_no)
 }
 
 inline void
-net_set_mac_octate(mac_t *dest_mac, mac_t *src_mac)
+net_set_mac_octate(mac_t *dest_mac, uint8_t octate_no, uint8_t value)
 {
-    memcpy(dest_mac, src_mac, sizeof(mac_t));
+    dest_mac->addr[octate_no] = value;
 }
 
 inline bool
@@ -93,4 +94,35 @@ bool net_are_ip_equal(ipv4_t *ip_1, ipv4_t *ip_2)
             (ip_1->addr[1] == ip_2->addr[1]) &&
             (ip_1->addr[2] == ip_2->addr[2]) &&
             (ip_1->addr[3] == ip_2->addr[3]));
+}
+
+void net_dump_ipv4_addr(ipv4_t *ipv4, uint8_t mask)
+{
+    printf("%u.%u.%u.%u/%u",
+           net_get_ipv4_octate(ipv4, 3),
+           net_get_ipv4_octate(ipv4, 2),
+           net_get_ipv4_octate(ipv4, 1),
+           net_get_ipv4_octate(ipv4, 0),
+           mask);
+}
+
+void net_dump_mac_addr(mac_t *mac)
+{
+    printf("%u:%u:%u:%u:%u:%u",
+           net_get_mac_octate(mac, 5),
+           net_get_mac_octate(mac, 4),
+           net_get_mac_octate(mac, 3),
+           net_get_mac_octate(mac, 2),
+           net_get_mac_octate(mac, 1),
+           net_get_mac_octate(mac, 0));
+}
+
+void net_copy_ipv4(ipv4_t *dest, ipv4_t *src)
+{
+    memcpy(dest, src, sizeof(ipv4_t));
+}
+
+void net_copy_mac(mac_t *dest, mac_t *src)
+{
+    memcpy(dest, src, sizeof(mac_t));
 }

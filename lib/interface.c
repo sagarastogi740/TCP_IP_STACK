@@ -64,9 +64,9 @@ interface_set_mac(interface_t *interface, uint64_t mac)
 }
 
 inline void
-interface_set_mac_octet(interface_t *interface, mac_t *mac)
+interface_set_mac_octet(interface_t *interface, uint8_t octate_no, uint8_t value)
 {
-    net_set_mac_octate(&interface->mac, mac);
+    net_set_mac_octate(&interface->mac, octate_no, value);
 }
 
 inline uint32_t
