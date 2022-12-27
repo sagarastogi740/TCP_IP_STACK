@@ -47,6 +47,9 @@ void interface_set_mac_octet(interface_t *interface, uint8_t octate_no, uint8_t 
 uint32_t
 interface_get_ip(interface_t *interface);
 
+ipv4_t *
+interface_get_ip_ipv4(interface_t *interface);
+
 void interface_set_ip(interface_t *interface, uint32_t ip);
 
 void interface_set_ip_octate(interface_t *interface, uint8_t octate_no, uint8_t val);

@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "node.h"
 #include "interface.h"
+#include "comm.h"
+#include "../Layer2/arp_table.h"
 
 inline interface_t *
 node_add_interface(node_t *node, uint32_t ip_addr, uint8_t net_mask)
@@ -19,7 +21,11 @@ node_add_interface(node_t *node, uint32_t ip_addr, uint8_t net_mask)
 inline node_t *
 node_create(void)
 {
-    return (node_t *)calloc(1, sizeof(node_t));
+    node_t *node = (node_t *)calloc(1, sizeof(node_t));
+    init_glthread(&node->glue);
+    arp_table_init(&node->arp_table);
+    comm_init_udp_socket(node);
+    return node;
 }
 
 inline void
@@ -98,4 +104,26 @@ inline interface_t *
 node_get_interface_by_id(node_t *node, uint32_t interface_id)
 {
     return node->intf[interface_id];
+}
+
+inline void
+node_dump_arp_table(node_t *node)
+{
+    arp_table_dump(&node->arp_table);
+}
+
+interface_t *
+node_get_matching_subnet_interface(node_t *node, char *ip_addr)
+{
+    interface_t *intf = NULL;
+    ipv4_t ip = net_ip_string_to_ipv4(ip_addr);
+    NODE_ITERATE_OVER_INTF_START(node, intf)
+    {
+        if (net_are_ip_equal(interface_get_ip_ipv4(intf), &ip))
+        {
+            return intf;
+        }
+    }
+    NODE_ITERATE_OVER_INTF_END()
+    return NULL;
 }

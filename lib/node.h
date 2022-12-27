@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "glthread.h"
 #include "net.h"
+#include "../Layer2/arp_table.h"
 
 #define MAX_INTF_PER_NODE 64
 
@@ -27,6 +28,7 @@ typedef struct node_
     ipv4_t loopback;
     uint32_t udp_port_number;
     int udp_sock_fd;
+    arp_table_t arp_table;
     glthread_t glue;
 } node_t;
 
@@ -67,5 +69,10 @@ void node_set_udp_sock_fd(node_t *node, int udp_sock_fd);
 
 interface_t *
 node_get_interface_by_id(node_t *node, uint32_t interface_id);
+
+void node_dump_arp_table(node_t *node);
+
+interface_t *
+node_get_matching_subnet_interface(node_t *node, char *ip_addr);
 
 #endif /* __NODE_H__ */

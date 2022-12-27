@@ -13,6 +13,8 @@ typedef struct arp_table_
 arp_table_t *
 arp_table_create();
 
+void arp_table_init(arp_table_t *arp_table);
+
 interface_t *
 arp_table_lookup(arp_table_t *arp_table, ipv4_t *ip);
 

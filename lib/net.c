@@ -126,3 +126,49 @@ void net_copy_mac(mac_t *dest, mac_t *src)
 {
     memcpy(dest, src, sizeof(mac_t));
 }
+
+uint32_t
+net_ip_string_to_uin32(const char *ip)
+{
+    uint32_t sum = 0;
+    uint8_t num = 0;
+    size_t len = strnlen(ip, 15);
+    for (size_t i = 0; i < len; i++)
+    {
+        switch (ip[i])
+        {
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            num *= 10;
+            num += ((uint8_t)ip[i] - (uint8_t)'0');
+            break;
+        case '.':
+            sum *= 256;
+            sum += num;
+            num = 0;
+            break;
+        default:
+            printf("Unknown charactor in ip address string configured in topology.\n");
+            exit(0);
+        }
+    }
+    sum *= 256;
+    sum += num;
+    return sum;
+}
+
+ipv4_t net_ip_string_to_ipv4(const char *ip)
+{
+    uint32_t ip_uint32 = net_ip_string_to_uin32(ip);
+    ipv4_t ip_ipv4;
+    memcpy(&ip_ipv4, &ip_uint32, sizeof(ip_ipv4));
+    return ip_ipv4;
+}

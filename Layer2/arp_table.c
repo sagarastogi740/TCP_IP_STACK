@@ -7,7 +7,14 @@
 
 arp_table_t *arp_table_create()
 {
-    return (arp_table_t *)calloc(1, sizeof(arp_table_t));
+    arp_table_t *arp_table = (arp_table_t *)calloc(1, sizeof(arp_table_t));
+    init_glthread(&arp_table->arp_entries);
+    return arp_table;
+}
+
+void arp_table_init(arp_table_t *arp_table)
+{
+    init_glthread(&arp_table->arp_entries);
 }
 
 interface_t *arp_table_lookup(arp_table_t *arp_table, ipv4_t *ip)
@@ -58,6 +65,7 @@ void arp_table_entry_add(arp_table_t *arp_table, ipv4_t *ip, mac_t *mac, interfa
 void arp_table_dump(arp_table_t *arp_table)
 {
     glthread_t *itr;
+    printf("    IP            MAC       INTF\n");
     ITERATE_OVER_GLTHREAD(&arp_table->arp_entries, itr)
     {
         arp_entry_t *arp_entry = arp_entry_glue_to_entry(itr);

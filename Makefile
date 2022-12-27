@@ -9,7 +9,8 @@ OBJ = build/glthread.o \
 	build/comm.o \
 	build/layer2.o \
 	build/arp_entry.o \
-	build/arp_table.o
+	build/arp_table.o \
+	build/arp.o
 
 
 TARGET:out
@@ -49,6 +50,9 @@ build/arp_entry.o:Layer2/arp_entry.c
 
 build/arp_table.o:Layer2/arp_table.c
 	${CC} ${CFLAGS} -c Layer2/arp_table.c -o build/arp_table.o
+
+build/arp.o:Layer2/arp.c
+	${CC} ${CFLAGS} -c Layer2/arp.c -o build/arp.o
 
 clean:
 	rm -rf build/*

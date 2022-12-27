@@ -53,4 +53,10 @@ void net_copy_ipv4(ipv4_t *dest, ipv4_t *src);
 
 void net_copy_mac(mac_t *dest, mac_t *src);
 
+uint32_t
+net_ip_string_to_uin32(const char *ip);
+
+ipv4_t
+net_ip_string_to_ipv4(const char *ip);
+
 #endif /* __NET_H__ */

@@ -9,44 +9,6 @@
 #include "net.h"
 #include "comm.h"
 
-static inline uint32_t
-ip_string_to_uin32(const char *ip)
-{
-    uint32_t sum = 0;
-    uint8_t num = 0;
-    size_t len = strnlen(ip, 15);
-    for (size_t i = 0; i < len; i++)
-    {
-        switch (ip[i])
-        {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':
-            num *= 10;
-            num += ((uint8_t)ip[i] - (uint8_t)'0');
-            break;
-        case '.':
-            sum *= 256;
-            sum += num;
-            num = 0;
-            break;
-        default:
-            printf("Unknown charactor in ip address string configured in topology.\n");
-            exit(0);
-        }
-    }
-    sum *= 256;
-    sum += num;
-    return sum;
-}
-
 inline graph_t *
 graph_create(const char *topology_name)
 {
@@ -61,10 +23,8 @@ graph_create_node(graph_t *graph, const char *loopback)
 {
     node_t *node = node_create();
     node_set_id(node, graph->no_of_nodes++);
-    node_set_loopback(node, ip_string_to_uin32(loopback));
-    node_init_glue(node);
+    node_set_loopback(node, net_ip_string_to_uin32(loopback));
     glthread_add_next(&graph->graph_node_list, node_get_glue(node));
-    comm_init_udp_socket(node);
     return node;
 }
 
@@ -77,8 +37,8 @@ void graph_insert_link_between_two_nodes(node_t *node_1,
                                          uint64_t link_cost)
 {
     link_t *link = (link_t *)calloc(1, sizeof(link_t));
-    interface_t *intf_1 = node_add_interface(node_1, ip_string_to_uin32(ip_1), mask_1);
-    interface_t *intf_2 = node_add_interface(node_2, ip_string_to_uin32(ip_2), mask_2);
+    interface_t *intf_1 = node_add_interface(node_1, net_ip_string_to_uin32(ip_1), mask_1);
+    interface_t *intf_2 = node_add_interface(node_2, net_ip_string_to_uin32(ip_2), mask_2);
     link_set_interface1(link, intf_1);
     link_set_interface2(link, intf_2);
     link_set_cost(link, link_cost);

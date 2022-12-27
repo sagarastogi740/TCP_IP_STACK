@@ -75,6 +75,12 @@ interface_get_ip(interface_t *interface)
     return net_get_ipv4(&interface->ip);
 }
 
+inline ipv4_t *
+interface_get_ip_ipv4(interface_t *interface)
+{
+    return &interface->ip;
+}
+
 inline void
 interface_set_ip(interface_t *interface, uint32_t ip)
 {
