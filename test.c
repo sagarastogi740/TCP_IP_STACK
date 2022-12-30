@@ -24,6 +24,8 @@
 #include "lib/comm.h"
 #include "Layer2/arp_entry.h"
 #include "Layer2/arp_table.h"
+#include "Layer2/arp.h"
+#include "Layer2/ethernet.h"
 
 graph_t *build_topology()
 {
@@ -37,9 +39,8 @@ graph_t *build_topology()
     graph_insert_link_between_two_nodes(R0, R1, "192.168.0.1", "192.168.0.2", 24, 24, 0);
     graph_insert_link_between_two_nodes(R1, R2, "192.168.1.1", "192.168.1.2", 24, 24, 1);
     graph_insert_link_between_two_nodes(R2, R0, "192.168.2.1", "192.168.2.2", 24, 24, 2);
-
-    interface_t *intf = node_get_matching_subnet_interface(R0, "192.168.2.2");
-    printf("%u\n", intf->interface_id);
+    ipv4_t ip = net_ip_string_to_ipv4("192.168.1.2");
+    node_send_arp_broadcast_request(R1, &ip, 24);
     return topo;
 }
 
@@ -49,11 +50,14 @@ int main()
     graph_t *graph = build_topology();
     // comm_send(graph, 0, 1, msg, sizeof(msg));
     // comm_send(graph, 0, 1, msg, sizeof(msg));
-    // while (1)
-    //     ;
+    sleep(1);
     // graph_dump(graph);
-    // ipv4_t ip = net_ip_string_to_ipv4("10.20.30.40");
+    // while (1);
+    //     ;
+    // ipv4_t ip = net_ip_string_to_ipv4("10.1.1.1");
+    // ipv4_t ip2 = net_ip_string_to_ipv4("10.1.0.2");
     // mac_t mac;
+    // printf("%d\n", net_ipv4_subnet_are_same(&ip, &ip2, 24, 24));
     // interface_t *intf;
     // net_set_ipv4_octate(&ip, 0, 1);
     // net_set_ipv4_octate(&ip, 1, 0);
@@ -66,6 +70,11 @@ int main()
     // net_set_mac_octate(&mac, 4, 5);
     // net_set_mac_octate(&mac, 5, 6);
 
+    // arp_t *arp = arp_create_broadcast(&mac, &ip, &ip);
+    // // // arp_dump(arp);
+    // // printf("Size = %lu\n", sizeof(arp_t));
+    // ethernet_t *eth = ethernet_create(&mac, &mac, 802, arp, sizeof(arp_t), 4982);
+    // ethernet_dump(eth);
     // intf = interface_create();
     // arp_table_t *t = arp_table_create();
     // arp_table_entry_add(t, &ip, &mac, intf);

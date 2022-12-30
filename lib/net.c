@@ -172,3 +172,24 @@ ipv4_t net_ip_string_to_ipv4(const char *ip)
     memcpy(&ip_ipv4, &ip_uint32, sizeof(ip_ipv4));
     return ip_ipv4;
 }
+
+void net_set_broadcast_mac(mac_t *mac)
+{
+    mac->addr[0] = 255;
+    mac->addr[1] = 255;
+    mac->addr[2] = 255;
+    mac->addr[3] = 255;
+    mac->addr[4] = 255;
+    mac->addr[5] = 255;
+}
+
+bool net_ipv4_subnet_are_same(ipv4_t *ip_1, ipv4_t *ip_2, uint8_t mask_1, uint8_t mask_2)
+{
+    uint32_t ip_a, ip_b, msk = ~0;
+    memcpy(&ip_a, ip_1->addr, sizeof(ip_a));
+    memcpy(&ip_b, ip_2->addr, sizeof(ip_b));
+    msk <<= (32 - (mask_1 < mask_2 ? mask_1 : mask_2));
+    ip_a &= msk;
+    ip_b &= msk;
+    return (ip_a == ip_b);
+}

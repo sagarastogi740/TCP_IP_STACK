@@ -59,4 +59,8 @@ net_ip_string_to_uin32(const char *ip);
 ipv4_t
 net_ip_string_to_ipv4(const char *ip);
 
+void net_set_broadcast_mac(mac_t *mac);
+
+bool net_ipv4_subnet_are_same(ipv4_t *ip_1, ipv4_t *ip_2, uint8_t mask_1, uint8_t mask_2);
+
 #endif /* __NET_H__ */

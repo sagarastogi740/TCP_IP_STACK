@@ -6,7 +6,6 @@
 
 #define ARP_BROAD_REQ 1
 #define ARP_REPLY 2
-#define ARP_MSG 806
 
 #pragma pack(push, 1)
 typedef struct arp_
@@ -22,5 +21,9 @@ typedef struct arp_
     ipv4_t dest_ip;
 } arp_t;
 #pragma pack(pop)
+
+arp_t *arp_create_broadcast(mac_t *src_mac, ipv4_t *src_ip, ipv4_t *dest_ip);
+
+void arp_dump(arp_t *arp);
 
 #endif /* __ARP_H__ */

@@ -190,6 +190,11 @@ void comm_send(graph_t *graph, uint32_t node_id, uint32_t interface_id, void *ms
     comm_send_pkt_out(msg, msg_size, intf);
 }
 
+void comm_interface_send(interface_t *intf, void *msg, uint32_t msg_size)
+{
+    comm_send_pkt_out(msg, msg_size, intf);
+}
+
 void comm_send_flood(graph_t *graph, uint32_t node_id, uint32_t exempted_intf_id, void *msg, uint32_t msg_size)
 {
     node_t *node = graph_get_node_by_id(graph, node_id);

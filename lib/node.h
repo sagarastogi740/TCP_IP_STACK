@@ -73,6 +73,8 @@ node_get_interface_by_id(node_t *node, uint32_t interface_id);
 void node_dump_arp_table(node_t *node);
 
 interface_t *
-node_get_matching_subnet_interface(node_t *node, char *ip_addr);
+node_get_matching_subnet_interface(node_t *node, ipv4_t *ip, uint8_t mask);
+
+void node_send_arp_broadcast_request(node_t *node, ipv4_t *dest_ip, uint8_t mask);
 
 #endif /* __NODE_H__ */

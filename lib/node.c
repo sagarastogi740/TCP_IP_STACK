@@ -2,7 +2,10 @@
 #include "node.h"
 #include "interface.h"
 #include "comm.h"
+#include "../Layer2/ethernet.h"
 #include "../Layer2/arp_table.h"
+#include "../Layer2/layer2.h"
+#include "../Layer2/arp.h"
 
 inline interface_t *
 node_add_interface(node_t *node, uint32_t ip_addr, uint8_t net_mask)
@@ -113,17 +116,30 @@ node_dump_arp_table(node_t *node)
 }
 
 interface_t *
-node_get_matching_subnet_interface(node_t *node, char *ip_addr)
+node_get_matching_subnet_interface(node_t *node, ipv4_t *ip, uint8_t mask)
 {
     interface_t *intf = NULL;
-    ipv4_t ip = net_ip_string_to_ipv4(ip_addr);
     NODE_ITERATE_OVER_INTF_START(node, intf)
     {
-        if (net_are_ip_equal(interface_get_ip_ipv4(intf), &ip))
+        if (net_ipv4_subnet_are_same(interface_get_ip_ipv4(intf), ip, mask, mask))
         {
             return intf;
         }
     }
     NODE_ITERATE_OVER_INTF_END()
     return NULL;
+}
+
+void node_send_arp_broadcast_request(node_t *node, ipv4_t *dest_ip, uint8_t mask)
+{
+    interface_t *intf = node_get_matching_subnet_interface(node, dest_ip, mask);
+    arp_t *arp = arp_create_broadcast(&intf->mac, &intf->ip, dest_ip);
+    ethernet_t *frame = ethernet_create_broadcast(&intf->mac, ARP_MSG, arp, sizeof(arp_t), 0);
+    free(arp);
+    comm_interface_send(intf, frame, ETHERNET_FRAME_SIZE_WITHOUT_PAYLOAD + sizeof(arp_t));
+    free(frame);
+}
+
+void node_send_arp_reply_msg(ethernet_t *ethernet_hdr, interface_t *oif)
+{
 }
