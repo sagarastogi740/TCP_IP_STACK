@@ -65,7 +65,7 @@ void arp_table_entry_add(arp_table_t *arp_table, ipv4_t *ip, mac_t *mac, interfa
 void arp_table_dump(arp_table_t *arp_table)
 {
     glthread_t *itr;
-    printf("    IP            MAC       INTF\n");
+    printf("     IP                 MAC            INTF\n");
     ITERATE_OVER_GLTHREAD(&arp_table->arp_entries, itr)
     {
         arp_entry_t *arp_entry = arp_entry_glue_to_entry(itr);

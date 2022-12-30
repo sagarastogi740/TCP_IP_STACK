@@ -41,6 +41,24 @@ graph_t *build_topology()
     graph_insert_link_between_two_nodes(R2, R0, "192.168.2.1", "192.168.2.2", 24, 24, 2);
     ipv4_t ip = net_ip_string_to_ipv4("192.168.1.2");
     node_send_arp_broadcast_request(R1, &ip, 24);
+    ip = net_ip_string_to_ipv4("192.168.0.1");
+    node_send_arp_broadcast_request(R1, &ip, 24);
+    ip = net_ip_string_to_ipv4("192.168.2.2");
+    node_send_arp_broadcast_request(R2, &ip, 24);
+    // ip = net_ip_string_to_ipv4("192.168.1.2");
+    // node_send_arp_broadcast_request(R1, &ip, 24);
+    // ip = net_ip_string_to_ipv4("192.168.1.2");
+    // node_send_arp_broadcast_request(R1, &ip, 24);
+    sleep(1);
+    printf("-------------------For node R0-----------------\n\n");
+    node_dump_arp_table(R0);
+    printf("\n\n\n");
+    printf("-------------------For node R1-----------------\n\n");
+    node_dump_arp_table(R1);
+    printf("\n\n\n");
+    printf("-------------------For node R2-----------------\n\n");
+    node_dump_arp_table(R2);
+    printf("\n\n\n");
     return topo;
 }
 
@@ -50,7 +68,6 @@ int main()
     graph_t *graph = build_topology();
     // comm_send(graph, 0, 1, msg, sizeof(msg));
     // comm_send(graph, 0, 1, msg, sizeof(msg));
-    sleep(1);
     // graph_dump(graph);
     // while (1);
     //     ;

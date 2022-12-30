@@ -140,6 +140,7 @@ void node_send_arp_broadcast_request(node_t *node, ipv4_t *dest_ip, uint8_t mask
     free(frame);
 }
 
-void node_send_arp_reply_msg(ethernet_t *ethernet_hdr, interface_t *oif)
+void node_send_arp_reply_msg(node_t *node, interface_t *oif, ethernet_t *ethernet_hdr)
 {
+    comm_interface_send(oif, (void *)ethernet_hdr, ethernet_hdr->length);
 }

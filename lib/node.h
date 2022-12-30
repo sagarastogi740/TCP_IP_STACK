@@ -5,6 +5,7 @@
 #include "glthread.h"
 #include "net.h"
 #include "../Layer2/arp_table.h"
+#include "../Layer2/ethernet.h"
 
 #define MAX_INTF_PER_NODE 64
 
@@ -76,5 +77,7 @@ interface_t *
 node_get_matching_subnet_interface(node_t *node, ipv4_t *ip, uint8_t mask);
 
 void node_send_arp_broadcast_request(node_t *node, ipv4_t *dest_ip, uint8_t mask);
+
+void node_send_arp_reply_msg(node_t *node, interface_t *oif, ethernet_t *ethernet_hdr);
 
 #endif /* __NODE_H__ */

@@ -24,6 +24,8 @@ typedef struct arp_
 
 arp_t *arp_create_broadcast(mac_t *src_mac, ipv4_t *src_ip, ipv4_t *dest_ip);
 
+arp_t *arp_create_reply(mac_t *src_mac, mac_t *dest_mac, ipv4_t *src_ip, ipv4_t *dest_ip);
+
 void arp_dump(arp_t *arp);
 
 #endif /* __ARP_H__ */
