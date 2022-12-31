@@ -1,6 +1,7 @@
 #ifndef __ARP_ENTRY_H__
 #define __ARP_ENTRY_H__
 
+#include <stdbool.h>
 #include "../lib/net.h"
 #include "../lib/interface.h"
 #include "../lib/glthread.h"
@@ -40,5 +41,7 @@ void arp_entry_set_interface(arp_entry_t *arp_entry, interface_t *oif);
 bool arp_entry_lookup(arp_entry_t *arp_entry, ipv4_t *ip);
 
 void arp_entry_dump(arp_entry_t *entry);
+
+bool arp_entry_equal(arp_entry_t *entry_1, arp_entry_t *entry_2);
 
 #endif /* __ARP_ENTRY_H__ */

@@ -58,8 +58,18 @@ void arp_table_delete_entry(arp_table_t *arp_table, ipv4_t *ip)
 
 void arp_table_entry_add(arp_table_t *arp_table, ipv4_t *ip, mac_t *mac, interface_t *oif)
 {
-    arp_entry_t *arp_entry = arp_entry_create(ip, mac, oif);
-    glthread_add_next(&arp_table->arp_entries, arp_entry_get_glue(arp_entry));
+    glthread_t *itr;
+    arp_entry_t *arp_entry_new = arp_entry_create(ip, mac, oif);
+    ITERATE_OVER_GLTHREAD(&arp_table->arp_entries, itr)
+    {
+        arp_entry_t *arp_entry_table = arp_entry_glue_to_entry(itr);
+        if (arp_entry_equal(arp_entry_table, arp_entry_new))
+        {
+            free(arp_entry_new);
+            return;
+        }
+    }
+    glthread_add_next(&arp_table->arp_entries, arp_entry_get_glue(arp_entry_new));
 }
 
 void arp_table_dump(arp_table_t *arp_table)

@@ -71,3 +71,8 @@ void arp_entry_dump(arp_entry_t *entry)
     printf("    ");
     printf("%u", interface_get_id(entry->oif));
 }
+
+bool arp_entry_equal(arp_entry_t *entry_1, arp_entry_t *entry_2)
+{
+    return net_are_ip_equal(&entry_1->ip, &entry_2->ip) && net_are_mac_equal(&entry_1->mac, &entry_2->mac) && (entry_1->oif == entry_2->oif);
+}

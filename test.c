@@ -45,10 +45,12 @@ graph_t *build_topology()
     node_send_arp_broadcast_request(R1, &ip, 24);
     ip = net_ip_string_to_ipv4("192.168.2.2");
     node_send_arp_broadcast_request(R2, &ip, 24);
-    // ip = net_ip_string_to_ipv4("192.168.1.2");
-    // node_send_arp_broadcast_request(R1, &ip, 24);
-    // ip = net_ip_string_to_ipv4("192.168.1.2");
-    // node_send_arp_broadcast_request(R1, &ip, 24);
+    ip = net_ip_string_to_ipv4("192.168.1.1");
+    node_send_arp_broadcast_request(R2, &ip, 24);
+    ip = net_ip_string_to_ipv4("192.168.0.2");
+    node_send_arp_broadcast_request(R0, &ip, 24);
+    ip = net_ip_string_to_ipv4("192.168.2.1");
+    node_send_arp_broadcast_request(R0, &ip, 24);
     sleep(1);
     printf("-------------------For node R0-----------------\n\n");
     node_dump_arp_table(R0);
